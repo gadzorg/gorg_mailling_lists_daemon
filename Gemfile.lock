@@ -1,21 +1,6 @@
-GIT
-  remote: https://github.com/gadzorg/gram2_api_client_ruby.git
-  revision: f1ecf9b0249fe9e221902d6c8757cefbe1c53e8e
-  branch: Zooip-patch-1
-  specs:
-    gram_v2_client (2.1.0)
-      activeresource (~> 4.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (4.2.7)
-      activesupport (= 4.2.7)
-      builder (~> 3.1)
-    activeresource (4.1.0)
-      activemodel (~> 4.0)
-      activesupport (~> 4.0)
-      rails-observers (~> 0.1.2)
     activesupport (4.2.7)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
@@ -26,7 +11,6 @@ GEM
     amq-protocol (2.0.1)
     bogus (0.1.6)
       dependor (>= 0.0.4)
-    builder (3.2.2)
     bunny (2.5.0)
       amq-protocol (>= 2.0.1)
     byebug (9.0.5)
@@ -64,8 +48,6 @@ GEM
       bunny (~> 2.2, >= 2.2.2)
       gorg_message_sender (~> 1)
       json-schema (~> 2.6)
-    gram_v1_client (1.0.0)
-      activeresource (~> 4.0)
     httpclient (2.8.1)
     hurley (0.2)
     i18n (0.7.0)
@@ -85,8 +67,6 @@ GEM
     multi_json (1.12.1)
     multipart-post (2.0.0)
     os (0.9.6)
-    rails-observers (0.1.2)
-      activemodel (~> 4.0)
     redis (3.3.1)
     representable (2.3.0)
       uber (~> 0.0.7)
@@ -134,8 +114,6 @@ DEPENDENCIES
   googleauth
   gorg_message_sender
   gorg_service
-  gram_v1_client
-  gram_v2_client!
   redis (~> 3.2)
   rspec
   rspec-collection_matchers
