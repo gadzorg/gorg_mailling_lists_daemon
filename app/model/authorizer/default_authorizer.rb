@@ -15,7 +15,7 @@ class DefaultAuthorizer
 
     def authorize
       user_id=GorgMaillingListsDaemon.config['admin_user_id']
-      scopes = ['https://www.googleapis.com/auth/admin.directory.user','https://www.googleapis.com/auth/admin.directory.group','https://www.googleapis.com/auth/apps.groups.settings']
+      scopes = ['https://www.googleapis.com/auth/admin.directory.group','https://www.googleapis.com/auth/apps.groups.settings']
 
       authorizer = Google::Auth::UserAuthorizer.new(client_id, scopes, token_store)
 

@@ -52,8 +52,9 @@ GorgService.configure do |c|
   c.logger=GorgMaillingListsDaemon.logger
 
   c.message_handler_map={
-    # 'request.gapps.create' => CreateUserMessageHandler,
-    # 'request.gapps.update' => UpdateUserMessageHandler,
-    # 'request.gapps.delete' => DeleteUserMessageHandler,
+    'request.maillinglist.update' => UpdateMaillingListMessageHandler,
+    'request.maillinglist.delete' => DeleteMaillingListMessageHandler,
   }
 end
+
+sender=GorgMessageSender.new(host: "rabbitmq.gorgu.net", port: 5672, user: "rat-ldapd", pass: "ldapdPasswd", exchange_name: "agoram_event_exchange", vhost: "dev-rat", app_id: "bar", durable_exchange: true)

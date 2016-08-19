@@ -50,7 +50,7 @@ class GGroup
       return true
     else
       self.persisted = false
-      if gg=self.class.find(self.id||self.primary_email)
+      if gg=self.class.find(self.id||self.email)
         self.id=gg.id
         self.persisted = true
         return true

@@ -53,11 +53,6 @@ RSpec.describe MaillingList, type: :model do
         expect(ml.valid?).to be(true)
       end
 
-      it "set default values" do
-        ml.valid?
-        expect(ml.message_max_bytes_size).to eq(3145728)
-      end
-
       it "has no error" do
         ml.valid?
         expect(ml.errors).to match_array([])
@@ -69,11 +64,6 @@ RSpec.describe MaillingList, type: :model do
 
       it "returns false" do
         expect(ml.valid?).to be(false)
-      end
-
-      it "doesn't set default values" do
-        ml.valid?
-        expect(ml.message_max_bytes_size).to eq(nil)
       end
 
       it "set errors" do

@@ -94,9 +94,15 @@ class MaillingList
     }.delete_if { |k, v| v.nil? }
   end
 
+  def set_default
+    hsh=self.to_h
+    JSON::Validator.fully_validate(JSON_SCHEMA, hsh, :insert_defaults => true)
+    set_values_from_hash hsh
+  end
+
   def valid?
     hsh=self.to_h
-    @errors=JSON::Validator.fully_validate(JSON_SCHEMA, hsh, :insert_defaults => true)
+    @errors=JSON::Validator.fully_validate(JSON_SCHEMA, hsh)
     if errors.any?
       return false
     else
@@ -107,11 +113,12 @@ class MaillingList
   end
 
   def google_group
-    gg=GGroup.new( 
-        email: @primary_email,
-        name:  @name,
-        description: @description
-      )
+    hsh={
+          email: @primary_email,
+          name:  @name,
+          description: @description
+        }.delete_if { |k, v| v.nil? }
+    gg=GGroup.new(hsh)
   end
 
   def google_group_settings
@@ -119,9 +126,9 @@ class MaillingList
     ggs_base_data={
       max_message_bytes: @message_max_bytes_size,
       custom_footer_text: @message_footer,
-      include_custom_footer: (@message_footer ? true : false),
+      include_custom_footer: @message_footer&&(@message_footer=="" ? false : true),
       is_archived: @is_archived,
-    }
+    }.delete_if { |k, v| v.nil? }
 
     ggs_distribution_data= case @distribution_policy
     when "open"
