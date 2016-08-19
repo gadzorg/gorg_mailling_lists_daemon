@@ -1,0 +1,35 @@
+default: &default
+  application_name: GorgMaillingListsDaemon-test
+  application_id: gdd
+
+  authorizer: DefaultAuthorizer
+
+  admin_user_id: my.user@my_org.com
+  message_handler_map:
+    request.gapps.create: DefaultMessageHandler
+
+  rabbitmq_host: localhost
+  rabbitmq_port: 5672
+  rabbitmq_vhost: /
+  rabbitmq_queue_name: gdirdaemon
+  rabbitmq_deferred_time: 1800000
+  rabbitmq_max_attempts: 48
+  exchange_name: exchange
+  rabbitmq_user: my_user
+  rabbitmq_password: P4ssWord
+
+  log_routing_key:"logging.key"
+  gram_api_host: myHost.com
+  gram_api_user: myUser
+  gram_api_password: PasswRD
+  gram_api_proxy: myproxy.mydomain.com
+
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
