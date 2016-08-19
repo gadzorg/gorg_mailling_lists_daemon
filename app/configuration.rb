@@ -12,7 +12,7 @@ class GorgMaillingListsDaemon::Configuration
   end
 
   def env_value(key)
-    env_var_name="GDD_#{key.to_s.upcase}"
+    env_var_name="GMLD_#{key.to_s.upcase}"
     ENV[env_var_name]
   end
 end
