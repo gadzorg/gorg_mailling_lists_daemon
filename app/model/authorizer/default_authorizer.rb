@@ -10,7 +10,7 @@ class DefaultAuthorizer
   class << self
 
     OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
-    CLIENT_SECRET_ENV_VAR="GDD_GOOGLE_CLIENT_SECRET"
+    CLIENT_SECRET_ENV_VAR="GMLD_GOOGLE_CLIENT_SECRET"
     CLIENT_SECRET_FILE_PATH=File.expand_path("../secrets/client_secret.json",GorgMaillingListsDaemon.root)
 
     def authorize
