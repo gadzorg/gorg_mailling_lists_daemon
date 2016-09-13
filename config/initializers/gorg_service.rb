@@ -52,8 +52,8 @@ GorgService.configure do |c|
   c.logger=GorgMaillingListsDaemon.logger
 
   c.message_handler_map={
-    'request.maillinglist.update' => UpdateMaillingListMessageHandler,
-    'request.maillinglist.delete' => DeleteMaillingListMessageHandler,
+    'request.mailinglist.update' => UpdateMaillingListMessageHandler,
+    'request.mailinglist.delete' => DeleteMaillingListMessageHandler,
   }
 end
 
