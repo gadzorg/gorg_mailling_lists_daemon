@@ -3,7 +3,7 @@ class RateLimiterService
   def initialize(key=GorgMaillingListsDaemon.config['admin_user_id'],time_window=GorgMaillingListsDaemon.config['google_api_rate_time_window'].to_i,max=GorgMaillingListsDaemon.config['google_api_rate_limit'].to_i)
     @time_window=time_window.to_i
     @max=max.to_i
-    @key="#{key}_#{@time_window}_#{@max}"
+    @key="#{key}_#{@time_window}"
     @r=self.class.redis
   end
 
