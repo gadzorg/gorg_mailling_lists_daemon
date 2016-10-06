@@ -26,8 +26,10 @@ class GUser
   def save
     if persisted?
       self.update_from_user_obj!(self.class.service.patch_user(self.id, self))
+      rate_limiter_service.incr
     else
       self.update_from_user_obj!(self.class.service.insert_user(self))
+      rate_limiter_service.incr
     end
     self
   end
@@ -38,6 +40,7 @@ class GUser
   # @return [Nil]
   def delete
     response=self.class.service.delete_user self.self.id
+    rate_limiter_service.incr
     self.persisted=false
     response
   end
@@ -79,6 +82,7 @@ class GUser
   def self.find user_key
     begin
       user=service.get_user user_key
+      rate_limiter_service.incr
       user.persisted=true
       user
     rescue Google::Apis::ClientError => e
@@ -92,6 +96,7 @@ class GUser
 
   # Undelete requested email in Google Directory
   def self.undelete primary_email
+    rate_limiter_service.incr
     service.undelete_user primary_email
   end
 
@@ -104,6 +109,10 @@ class GUser
     # Copy provided user data in current user data
     def update_from_user_obj! u_obj
       self.update!(u_obj.to_h)
+    end
+
+    def rate_limiter_service
+      RateLimiterService.new
     end
 
 end
