@@ -63,7 +63,7 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
     while actions.any?
       GorgMaillingListsDaemon.logger.debug "Il reste #{actions.count} actions a effectuer"
       rl.wait
-      count=rl.allowed_count
+      count=[rl.allowed_count,75].min
       b=actions.shift(count)
       GorgMaillingListsDaemon.logger.debug "Batch size : #{b.count}"
 
