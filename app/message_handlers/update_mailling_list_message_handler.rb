@@ -67,7 +67,7 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
       b=actions.shift(count)
       GorgMaillingListsDaemon.logger.debug "Batch size : #{b.count}"
 
-      GGroup.service.batch do
+      #GGroup.service.batch do
         b.each do |a|
           case a[:action]
           when :create
@@ -76,7 +76,7 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
             @gg.delete_member a[:value]
           end
         end
-      end
+      #end
     end
 
     GorgMaillingListsDaemon.logger.info "Successfully update members of #{mailling_list.primary_email} : add #{to_create.count}, del #{to_delete.count}"
