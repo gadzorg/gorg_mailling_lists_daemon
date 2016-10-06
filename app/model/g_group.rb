@@ -21,11 +21,11 @@ class GGroup
   #  Google::Apis::AdminDirectoryV1::User updated with Google Directory data
   def save
     if persisted?
+      rate_limiter_service.incr
       self.update_from_group_obj!(self.class.service.patch_group(self.id, self))
-      rate_limiter_service.incr
     else
-      self.update_from_group_obj!(self.class.service.insert_group(self))
       rate_limiter_service.incr
+      self.update_from_group_obj!(self.class.service.insert_group(self))
     end
     self
   end
@@ -69,27 +69,27 @@ class GGroup
   # Return nil if not persisted yet
   def refresh
     if persisted?
-      self.update_from_group_obj!(self.class.find self.id)
       rate_limiter_service.incr
+      self.update_from_group_obj!(self.class.find self.id)
     end
   end
 
   def members
     if persisted?
-      self.class.service.list_members self.id
       rate_limiter_service.incr
+      self.class.service.list_members self.id
     end
   end
 
   def delete_member email
-    self.class.service.delete_member self.id, email
     rate_limiter_service.incr
+    self.class.service.delete_member self.id, email
   end
 
   def add_member email, role: "MEMBER"
     member=Google::Apis::AdminDirectoryV1::Member.new(email: email, role: role)
-    self.class.service.insert_member self.id, member
     rate_limiter_service.incr
+    self.class.service.insert_member self.id, member
   end
 
   # Lookup requested email in Google Directory
@@ -97,8 +97,8 @@ class GGroup
   #  or nil if not found
   def self.find group_key
     begin
-      user=service.get_group group_key
       rate_limiter_service.incr
+      user=service.get_group group_key
       user.persisted=true
       user
     rescue Google::Apis::ClientError => e
