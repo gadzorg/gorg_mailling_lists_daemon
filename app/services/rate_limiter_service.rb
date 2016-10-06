@@ -12,7 +12,7 @@ class RateLimiterService
   end
 
   def time_to_wait
-    [@r.ttl(@key),0].max
+    [@r.ttl(@key).to_i,0].max
   end
 
   def allowed_count
