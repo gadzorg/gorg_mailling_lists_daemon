@@ -53,8 +53,8 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
 
     #Slice actions in batch of 1000 (max acceptable value for Google APIs)
     actions=[]
-    actions+= to_create.map{|email| {action: :create, value: email}}
     actions+= to_delete.map{|email| {action: :delete, value: email}}
+    actions+= to_create.map{|email| {action: :create, value: email}}
     actions.each_slice(1000) do |b|
       GGroup.service.batch do
         b.each do |a|
