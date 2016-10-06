@@ -25,11 +25,11 @@ class GUser
   #  Google::Apis::AdminDirectoryV1::User updated with Google Directory data
   def save
     if persisted?
+      rate_limiter_service.incr
       self.update_from_user_obj!(self.class.service.patch_user(self.id, self))
-      rate_limiter_service.incr
     else
-      self.update_from_user_obj!(self.class.service.insert_user(self))
       rate_limiter_service.incr
+      self.update_from_user_obj!(self.class.service.insert_user(self))
     end
     self
   end
@@ -39,8 +39,8 @@ class GUser
   #
   # @return [Nil]
   def delete
-    response=self.class.service.delete_user self.self.id
     rate_limiter_service.incr
+    response=self.class.service.delete_user self.self.id
     self.persisted=false
     response
   end
@@ -58,6 +58,7 @@ class GUser
     else
       self.persisted = false
       if gu=self.class.find(self.id||self.primary_email)
+        rate_limiter_service.incr
         self.id=gu.id
         self.persisted = true
         return true
@@ -72,6 +73,7 @@ class GUser
   # Return nil if not persisted yet
   def refresh
     if persisted?
+      rate_limiter_service.incr
       self.update_from_user_obj!(self.class.find self.id)
     end
   end
@@ -81,8 +83,8 @@ class GUser
   #  or nil if not found
   def self.find user_key
     begin
-      user=service.get_user user_key
       rate_limiter_service.incr
+      user=service.get_user user_key
       user.persisted=true
       user
     rescue Google::Apis::ClientError => e
