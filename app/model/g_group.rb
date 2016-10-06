@@ -128,7 +128,7 @@ class GGroup
     self.class.rate_limiter_service
   end
 
-  def rate_limiter_service
+  def self.rate_limiter_service
     RateLimiterService.new
   end
 
