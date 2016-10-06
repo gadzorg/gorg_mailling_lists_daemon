@@ -56,9 +56,8 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
 
     #Slice actions in batch of 1000 (max acceptable value for Google APIs)
     actions=[]
-    actions+= to_create.map{|email| {action: :create, value: email}}
     actions+= to_delete.map{|email| {action: :delete, value: email}}
-
+    actions+= to_create.map{|email| {action: :create, value: email}}
 
     rl=RateLimiterService.new
     while actions.any?
@@ -66,6 +65,7 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
       count=rl.allowed_count
       b=actions.shift(count)
       rl.incr(rl.allowed_count)
+      
       GGroup.service.batch do
         b.each do |a|
           case a[:action]
