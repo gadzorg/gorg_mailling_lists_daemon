@@ -124,9 +124,14 @@ class GGroup
 
   private
 
-    def rate_limiter_service
-      RateLimiterService.new
-    end
+  def rate_limiter_service
+    self.class.rate_limiter_service
+  end
+
+  def rate_limiter_service
+    RateLimiterService.new
+  end
+
 
 
 end

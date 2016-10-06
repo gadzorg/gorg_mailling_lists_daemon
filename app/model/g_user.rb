@@ -111,8 +111,13 @@ class GUser
       self.update!(u_obj.to_h)
     end
 
-    def rate_limiter_service
-      RateLimiterService.new
-    end
+private
+  def rate_limiter_service
+    self.class.rate_limiter_service
+  end
+
+  def self.rate_limiter_service
+    RateLimiterService.new
+  end
 
 end
