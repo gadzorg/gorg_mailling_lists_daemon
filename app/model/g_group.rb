@@ -112,6 +112,8 @@ class GGroup
   #  Service used to perform API calls
   def self.service
     @service||=DirectoryService.new
+    @service.quota_user=SecureRandom.uuid
+    @service
   end
 
   # Copy provided user data in current user data
