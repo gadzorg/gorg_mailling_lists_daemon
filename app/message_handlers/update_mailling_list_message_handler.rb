@@ -64,8 +64,9 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
       rl.wait
       count=rl.allowed_count
       b=actions.shift(count)
-      rl.incr(rl.allowed_count)
-      
+      GorgMaillingListsDaemon.logger.debug "Batch size : #{b.count}"
+      rl.incr(b.count)
+
       GGroup.service.batch do
         b.each do |a|
           case a[:action]
