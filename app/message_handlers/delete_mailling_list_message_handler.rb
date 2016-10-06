@@ -5,10 +5,11 @@ require "json-schema"
 class DeleteMaillingListMessageHandler < BaseMessageHandler
   # Respond to routing key: request.maillinglist.delete
 
-  def validate_payload   
-    if msg.data[:mailling_list_key].blank?
-      GorgMaillingListsDaemon.logger.error "Data validation error : mailling_list_key key not found"
-      raise_hardfail("Data validation error", error: "mailling_list_key key not found")
+  def validate_payload
+    key=msg.data[:mailling_list_key]
+    if key&&key!=""
+      GorgMaillingListsDaemon.logger.error "Data validation error : #{key} key not found"
+      raise_hardfail("Data validation error", error: "#{key} key not found")
     end
     GorgMaillingListsDaemon.logger.debug "Message data validated"
   end
