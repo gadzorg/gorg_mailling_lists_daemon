@@ -42,6 +42,9 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
   end
 
   def update_group_members
+
+    
+
     current=@gg.members.members
     current_mails=current ? current.map{|m| m.email} : []
     target_mails=mailling_list.members
@@ -55,7 +58,14 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
     actions=[]
     actions+= to_create.map{|email| {action: :create, value: email}}
     actions+= to_delete.map{|email| {action: :delete, value: email}}
-    actions.each_slice(1000) do |b|
+
+
+    rl=RateLimiterService.new
+    while actions.any?
+      rl.wait
+      count=rl.allowed_count
+      b=actions.shift(count)
+      rl.incr(rl.allowed_count)
       GGroup.service.batch do
         b.each do |a|
           case a[:action]
