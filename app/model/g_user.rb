@@ -58,7 +58,6 @@ class GUser
     else
       self.persisted = false
       if gu=self.class.find(self.id||self.primary_email)
-        rate_limiter_service.incr
         self.id=gu.id
         self.persisted = true
         return true
@@ -73,7 +72,6 @@ class GUser
   # Return nil if not persisted yet
   def refresh
     if persisted?
-      rate_limiter_service.incr
       self.update_from_user_obj!(self.class.find self.id)
     end
   end

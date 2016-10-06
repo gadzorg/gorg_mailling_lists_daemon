@@ -54,7 +54,6 @@ class GGroup
     else
       self.persisted = false
       if gg=self.class.find(self.id||self.email)
-        rate_limiter_service.incr
         self.id=gg.id
         self.persisted = true
         return true
@@ -69,7 +68,6 @@ class GGroup
   # Return nil if not persisted yet
   def refresh
     if persisted?
-      rate_limiter_service.incr
       self.update_from_group_obj!(self.class.find self.id)
     end
   end

@@ -9,7 +9,7 @@ class RateLimiterService
 
   def wait
     unless allowed_count
-      time=time_to_wait
+      time=time_to_wait+10
       GorgMaillingListsDaemon.logger.debug "Quota exceeded, waiting for #{time} seconds..."
       sleep(time) 
     end
