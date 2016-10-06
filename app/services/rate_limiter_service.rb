@@ -4,7 +4,7 @@ class RateLimiterService
     @time_window=time_window.to_i
     @max=max.to_i
     @key="#{key}_#{@time_window}_#{@max}"
-    @r=Redis.new(url:GorgMaillingListsDaemon.config['redis_url'])
+    @r=self.class.redis
   end
 
   def wait
@@ -32,6 +32,10 @@ class RateLimiterService
     ret=@r.incrby(@key, n).to_i
     @r.expire(@key, @time_window) if @r.ttl(@key).to_i < 0
     ret
+  end
+
+  def self.redis
+    @redis||=Redis.new(url:GorgMaillingListsDaemon.config['redis_url'])
   end
 
 end
