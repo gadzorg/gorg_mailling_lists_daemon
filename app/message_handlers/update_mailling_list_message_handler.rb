@@ -61,6 +61,7 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
 
     rl=RateLimiterService.new
     while actions.any?
+      GorgMaillingListsDaemon.logger.debug "Il reste #{actions.count} actions a effectuer"
       rl.wait
       count=rl.allowed_count
       b=actions.shift(count)
