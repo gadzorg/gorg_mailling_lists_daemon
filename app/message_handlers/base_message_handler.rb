@@ -29,7 +29,10 @@ class BaseMessageHandler < GorgService::MessageHandler
       rescue Google::Apis::ClientError =>e
         if e.message.start_with? "dailyLimitExceeded"
           GorgMaillingListsDaemon.logger.error e.message
-          raise_softfail("Google API Quota exceeded", error: e.message)
+          raise_softfail("Google API daily Quota exceeded", error: e.message)
+        elsif e.message.start_with? "quotaExceeded"
+          GorgMaillingListsDaemon.logger.error e.message
+          raise_softfail("Google API 100 seconds Quota exceeded", error: e.message)
         end
         raise
       rescue Faraday::ConnectionFailed => e
