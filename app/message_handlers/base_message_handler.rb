@@ -35,6 +35,13 @@ class BaseMessageHandler < GorgService::MessageHandler
           raise_softfail("Google API 100 seconds Quota exceeded", error: e.message)
         end
         raise
+      rescue Google::Apis::ServerError => e
+        if e.message.start_with? "Server error"
+          GorgMaillingListsDaemon.logger.error e.message
+          raise_softfail("Google server error, retrying later", error: e.message)
+        end
+        raise
+      end
       rescue Faraday::ConnectionFailed => e
         raise_google_connection_error
       end
