@@ -43,7 +43,7 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
   end
 
   def update_group_members
-    current=@gg.members.members
+    current=@gg.members
     current_mails=current ? current.map{|m| m.email} : []
     target_mails=mailling_list.members
 
