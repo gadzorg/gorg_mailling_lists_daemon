@@ -33,6 +33,9 @@ class BaseMessageHandler < GorgService::MessageHandler
         elsif e.message.start_with? "quotaExceeded"
           GorgMaillingListsDaemon.logger.error e.message
           raise_softfail("Google API 100 seconds Quota exceeded", error: e.message)
+        elsif e.message.start_with? "forbidden"
+          GorgMaillingListsDaemon.logger.error e.message
+          raise_softfail("Google forbidden this request but it's a strange bug", error: e.message)
         end
         raise
       rescue Google::Apis::ServerError => e

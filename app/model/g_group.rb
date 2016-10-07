@@ -74,8 +74,8 @@ class GGroup
 
   def members
     if persisted?
-      rate_limiter_service.incr
       members=self.class.service.fetch_all(items: :members) do |token|
+        rate_limiter_service.incr
         self.class.service.list_members self.id, page_token: token
       end
       members.to_a
