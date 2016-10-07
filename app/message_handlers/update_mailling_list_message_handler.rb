@@ -42,9 +42,6 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
   end
 
   def update_group_members
-
-    
-
     current=@gg.members.members
     current_mails=current ? current.map{|m| m.email} : []
     target_mails=mailling_list.members
@@ -64,25 +61,19 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
     while actions.any?
       GorgMaillingListsDaemon.logger.debug "Il reste #{actions.count} actions a effectuer"
       rl.wait
-      count=[rl.allowed_count,25].min
+      count=[rl.allowed_count,batch_size].min
       b=actions.shift(count)
       GorgMaillingListsDaemon.logger.debug "Batch size : #{b.count}"
 
-
       begin
-        GGroup.service.batch do
-          b.each do |a|
-            case a[:action]
-            when :create
-              @gg.add_member a[:value]
-            when :delete
-              @gg.delete_member a[:value]
-            end
-          end
-        end
+        if b.count > 1
+          GGroup.service.batch{process_action_batch b}
+        else
+        process_action_batch b
       rescue Google::Apis::ClientError => e
         if e.message.start_with? "duplicate: Member already exists"
-          dup_errors<<e
+          log = (b.count==1 ? "#{e.message} : #{b.first}" : e.message
+          dup_errors<<
         else
           raise
         end
@@ -95,6 +86,21 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
     end
 
     GorgMaillingListsDaemon.logger.info "Successfully update members of #{mailling_list.primary_email} : add #{to_create.count}, del #{to_delete.count}"
+  end
+
+  def batch_size
+    [GorgMaillingListsDaemon.config['batch_size'].to_i,1].max
+  end
+
+  def process_action_batch batch
+    batch.each do |a|
+      case a[:action]
+      when :create
+        @gg.add_member a[:value]
+      when :delete
+        @gg.delete_member a[:value]
+      end
+    end
   end
 
   def update_group_aliases
