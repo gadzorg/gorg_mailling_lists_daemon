@@ -14,6 +14,7 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
   end
 
   def process
+   GGroup.reload_service
    update_group
    update_group_settings
    update_group_aliases if mailling_list.aliases
@@ -65,8 +66,9 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
       b=actions.shift(count)
       GorgMaillingListsDaemon.logger.debug "Batch size : #{b.count}"
       GorgMaillingListsDaemon.logger.debug "Batch : #{b.to_s}"
-      
+
       begin
+        GGroup.reload_service
         if b.count > 1
           GGroup.service.batch{process_action_batch b}
         else

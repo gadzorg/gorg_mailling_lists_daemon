@@ -111,11 +111,15 @@ class GGroup
   # @return [DirectoryService]
   #  Service used to perform API calls
   def self.service
-    @service||=DirectoryService.new
+    @service||=self.reload_service
     @service.quota_user=SecureRandom.uuid
     @service
   end
 
+  def self.reload_service
+    @service=DirectoryService.new
+  end
+  
   # Copy provided user data in current user data
   def update_from_group_obj! g_obj
     self.update!(g_obj.to_h)

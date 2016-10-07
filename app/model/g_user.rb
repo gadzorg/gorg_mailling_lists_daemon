@@ -103,7 +103,11 @@ class GUser
   # @return [DirectoryService]
   #  Service used to perform API calls
   def self.service
-    @service||=DirectoryService.new
+    @service||=self.reload_service
+  end
+
+  def self.reload_service
+    @service=DirectoryService.new
   end
 
   # Copy provided user data in current user data
