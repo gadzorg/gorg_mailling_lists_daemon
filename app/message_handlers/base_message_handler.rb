@@ -41,7 +41,6 @@ class BaseMessageHandler < GorgService::MessageHandler
           raise_softfail("Google server error, retrying later", error: e.message)
         end
         raise
-      end
       rescue Faraday::ConnectionFailed => e
         raise_google_connection_error
       end
