@@ -43,7 +43,7 @@ GEM
     gorg_message_sender (1.4.0)
       bunny (~> 2.2, >= 2.2.2)
       json-schema (~> 2.6)
-    gorg_service (4.0.2)
+    gorg_service (4.1.0)
       bunny (~> 2.2, >= 2.2.2)
       gorg_message_sender (~> 1)
       json-schema (~> 2.6)

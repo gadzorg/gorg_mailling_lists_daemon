@@ -106,10 +106,10 @@ class GUser
     @service||=DirectoryService.new
   end
 
-    # Copy provided user data in current user data
-    def update_from_user_obj! u_obj
-      self.update!(u_obj.to_h)
-    end
+  # Copy provided user data in current user data
+  def update_from_user_obj! u_obj
+    self.update!(u_obj.to_h)
+  end
 
 private
   def rate_limiter_service
