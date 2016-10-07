@@ -69,11 +69,12 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
         if b.count > 1
           GGroup.service.batch{process_action_batch b}
         else
-        process_action_batch b
+          process_action_batch b
+        end
       rescue Google::Apis::ClientError => e
         if e.message.start_with? "duplicate: Member already exists"
-          log = (b.count==1 ? "#{e.message} : #{b.first}" : e.message
-          dup_errors<<
+          log = (b.count==1 ? "#{e.message} : #{b.first}" : e.message)
+          dup_errors<<log
         else
           raise
         end
