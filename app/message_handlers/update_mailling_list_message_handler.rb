@@ -59,6 +59,7 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
     actions+= to_delete.map{|email| {action: :delete, value: email}}
     actions+= to_create.map{|email| {action: :create, value: email}}
 
+    dup_errors=[]
     rl=RateLimiterService.new
     while actions.any?
       GorgMaillingListsDaemon.logger.debug "Il reste #{actions.count} actions a effectuer"
@@ -67,16 +68,30 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
       b=actions.shift(count)
       GorgMaillingListsDaemon.logger.debug "Batch size : #{b.count}"
 
-      GGroup.service.batch do
-        b.each do |a|
-          case a[:action]
-          when :create
-            @gg.add_member a[:value]
-          when :delete
-            @gg.delete_member a[:value]
+
+      begin
+        GGroup.service.batch do
+          b.each do |a|
+            case a[:action]
+            when :create
+              @gg.add_member a[:value]
+            when :delete
+              @gg.delete_member a[:value]
+            end
           end
         end
+      rescue Google::Apis::ClientError => e
+        if e.message.start_with? "duplicate: Member already exists"
+          dup_errors<<e
+        else
+          raise
+        end
       end
+    end
+
+    if dup_errors.any?
+      GorgMaillingListsDaemon.logger.error "Duplicated membres : #{dup_errors.to_s}"
+      raise_hardfail("Duplicated membres : #{dup_errors.to_s}")
     end
 
     GorgMaillingListsDaemon.logger.info "Successfully update members of #{mailling_list.primary_email} : add #{to_create.count}, del #{to_delete.count}"
