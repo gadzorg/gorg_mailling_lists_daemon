@@ -75,7 +75,10 @@ class GGroup
   def members
     if persisted?
       rate_limiter_service.incr
-      self.class.service.list_members self.id
+      members=self.class.service.fetch_all(items: :members) do |token|
+        self.class.service.list_members self.id, page_token: token
+      end
+      members.to_a
     end
   end
 
@@ -119,7 +122,7 @@ class GGroup
   def self.reload_service
     @service=DirectoryService.new
   end
-  
+
   # Copy provided user data in current user data
   def update_from_group_obj! g_obj
     self.update!(g_obj.to_h)
