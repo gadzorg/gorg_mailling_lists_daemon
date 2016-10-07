@@ -64,7 +64,8 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
       count=[rl.allowed_count,batch_size].min
       b=actions.shift(count)
       GorgMaillingListsDaemon.logger.debug "Batch size : #{b.count}"
-
+      GorgMaillingListsDaemon.logger.debug "Batch : #{b.to_s}"
+      
       begin
         if b.count > 1
           GGroup.service.batch{process_action_batch b}
