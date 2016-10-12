@@ -121,6 +121,7 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
         end        
       end
     end
+    GorgMaillingListsDaemon.logger.info "Successfully update members roles of #{mailling_list.primary_email} : #{target_roles.keys.count} changes"
   end
 
   def batch_size
