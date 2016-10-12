@@ -23,6 +23,17 @@ RSpec.describe MaillingList, type: :model do
         distribution_policy:"open"
     }
   }
+  let (:complete_data_with_roles) {
+    complete_data.merge(
+      {
+        owners:[
+          "karine.durand@gadz.org"
+        ],
+        managers:[
+          "alexandre.narbonne@gadz.org"
+        ]
+      }
+    )}
 
   it "returns a hash" do
     expected_hash={
@@ -80,6 +91,23 @@ RSpec.describe MaillingList, type: :model do
     expect(gg.email).to eq("me211@gadz.org")
     expect(gg.description).to eq("Liste de diffusion de la promotion me211")
   end
+
+  describe "roles" do
+    let (:data) {complete_data_with_roles}
+
+    it "set owners" do
+      expect(ml.owners).to match_array(["karine.durand@gadz.org"])
+    end
+
+    it "set managers" do
+      expect(ml.managers).to match_array(["alexandre.narbonne@gadz.org"])
+    end
+
+    it "set owners and managers as members" do
+      expect(ml.members).to match_array(["alexandre.narbonne@gadz.org","dorian.becker@gadz.org","karine.durand@gadz.org"])
+    end
+  end
+
   describe "returns a google group settings" do
     let (:ggs) {ml.google_group_settings}
 
