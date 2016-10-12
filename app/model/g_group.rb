@@ -93,6 +93,24 @@ class GGroup
     self.class.service.insert_member self.id, member
   end
 
+  def privilegied_members
+    if persisted?
+      members=self.class.service.fetch_all(items: :members) do |token|
+        rate_limiter_service.incr
+        self.class.service.list_members self.id, page_token: token, roles: "OWNER, MANAGER"
+      end
+      members.to_a
+    end
+  end
+
+  def update_member_role email, role
+    if persisted?
+      member=Google::Apis::AdminDirectoryV1::Member.new(email: email, role: role)
+      rate_limiter_service.incr
+      self.class.service.update_member self.id, email, member
+    end
+  end
+
   # Lookup requested email in Google Directory
   # @return [Google::Apis::AdminDirectoryV1::User]
   #  or nil if not found
