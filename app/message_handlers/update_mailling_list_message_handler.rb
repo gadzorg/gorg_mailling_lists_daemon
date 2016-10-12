@@ -19,7 +19,7 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
    update_group_settings
    update_group_aliases if mailling_list.aliases
    update_group_members if mailling_list.members.any?
-   update_group_roles if (mailling_list.owners+mailling_list.managers).any?
+   update_group_roles# if (mailling_list.owners+mailling_list.managers).any?
   end
 
   def update_group
