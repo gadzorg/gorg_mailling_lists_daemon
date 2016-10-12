@@ -18,7 +18,8 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
    update_group
    update_group_settings
    update_group_aliases if mailling_list.aliases
-   update_group_members if mailling_list.members
+   update_group_members if mailling_list.members.any?
+   update_group_roles if (mailling_list.owners+mailling_list.managers).any?
   end
 
   def update_group
@@ -92,6 +93,36 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
     GorgMaillingListsDaemon.logger.info "Successfully update members of #{mailling_list.primary_email} : add #{to_create.count}, del #{to_delete.count}"
   end
 
+  def update_group_roles
+    current_emails=@gg.privilegied_members.map(&:email)
+
+    target_roles=Hash.new
+    mailling_list.owners.each{|email| target_roles[email]="OWNER"}
+    mailling_list.managers.each{|email| target_roles[email]="MANAGER"}
+    (current_emails-target_roles.keys).each{|email| target_roles[email]="MEMBER"}
+
+    actions=target_roles.map{|k,v| {action: :update_role, key: k,value: v}}
+    
+    rl=RateLimiterService.new
+    while actions.any?
+      GorgMaillingListsDaemon.logger.debug "Il reste #{actions.count} actions de modification de role a effectuer"
+      rl.wait
+      count=[rl.allowed_count,batch_size].min
+      b=actions.shift(count)
+      GorgMaillingListsDaemon.logger.debug "Batch size : #{b.count}"
+      GorgMaillingListsDaemon.logger.debug "Batch : #{b.to_s}"
+
+      begin
+        service=GGroup.reload_service
+        if b.count > 1
+          GGroup.service.batch{process_action_batch b}
+        else
+          process_action_batch b
+        end        
+      end
+    end
+  end
+
   def batch_size
     [GorgMaillingListsDaemon.config['batch_size'].to_i,1].max
   end
@@ -103,6 +134,8 @@ class UpdateMaillingListMessageHandler < BaseMessageHandler
         @gg.add_member a[:value]
       when :delete
         @gg.delete_member a[:value]
+      when :update_role
+        @gg.update_member_role(a[:key],a[:value])
       end
     end
   end

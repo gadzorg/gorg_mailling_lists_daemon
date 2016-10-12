@@ -23,6 +23,20 @@ class MaillingList
                    "type"=>"string"
                   }
                 },
+                "owners"=>{
+                  "type"=>"array",
+                  "description"=>"List of owners email address",
+                  "items"=>{
+                    "type"=>"string"
+                  }
+                },
+                "managers"=>{
+                  "type"=>"array",
+                  "description"=>"List of managers email address",
+                  "items"=>{
+                    "type"=>"string"
+                  }
+                },
                 "members"=>{
                   "type"=>"array",
                   "description"=>"List of members email address",
@@ -65,6 +79,8 @@ class MaillingList
                   :description,
                   :aliases,
                   :members,
+                  :managers,
+                  :owners,
                   :message_max_bytes_size,
                   :object_tag,
                   :message_footer,
@@ -172,7 +188,9 @@ class MaillingList
       @primary_email = hsh[:primary_email]
       @description = hsh[:description]
       @aliases = hsh[:aliases]
-      @members = hsh[:members]
+      @members = (hsh[:members].to_a+hsh[:owners].to_a+hsh[:managers].to_a).uniq
+      @managers = hsh[:managers].to_a-hsh[:owners].to_a
+      @owners = hsh[:owners].to_a
       @message_max_bytes_size = hsh[:message_max_bytes_size]
       @object_tag = hsh[:object_tag]
       @message_footer = hsh[:message_footer]
