@@ -102,6 +102,8 @@ class MaillingList
       :description => @description,
       :aliases => @aliases,
       :members => @members,
+      :owners => @owners,
+      :managers => @managers,
       :message_max_bytes_size => @message_max_bytes_size,
       :object_tag => @object_tag,
       :message_footer => @message_footer,
@@ -188,9 +190,9 @@ class MaillingList
       @primary_email = hsh[:primary_email]
       @description = hsh[:description]
       @aliases = hsh[:aliases]
-      @members = (hsh[:members].to_a+hsh[:owners].to_a+hsh[:managers].to_a).uniq
-      @managers = hsh[:managers].to_a-hsh[:owners].to_a
-      @owners = hsh[:owners].to_a
+      @members = (hsh[:members].to_a+hsh[:owners].to_a+hsh[:managers].to_a).uniq.dup
+      @managers = (hsh[:managers].to_a-hsh[:owners].to_a).dup
+      @owners = hsh[:owners].to_a.dup
       @message_max_bytes_size = hsh[:message_max_bytes_size]
       @object_tag = hsh[:object_tag]
       @message_footer = hsh[:message_footer]
