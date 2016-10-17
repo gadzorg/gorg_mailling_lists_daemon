@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe MaillingList, type: :model do
 
   let (:ml)   {MaillingList.new(data)}
-  let (:data) {complete_data}
+  let (:data) {complete_data_with_roles}
   let (:complete_data) {
     {
         name:"Me 211",
@@ -42,7 +42,14 @@ RSpec.describe MaillingList, type: :model do
         description: "Liste de diffusion de la promotion me211",
         members:[
           "alexandre.narbonne@gadz.org",
-          "dorian.becker@gadz.org"
+          "dorian.becker@gadz.org",
+          "karine.durand@gadz.org"
+        ],
+        owners:[
+            "karine.durand@gadz.org"
+        ],
+        managers:[
+            "alexandre.narbonne@gadz.org"
         ],
         aliases:[
           "me.211@gadz.org"
@@ -53,6 +60,7 @@ RSpec.describe MaillingList, type: :model do
         is_archived: true,
         distribution_policy:"open"
     }
+    puts ml.to_h
     expect(ml.to_h).to eq(expected_hash)
   end
 
