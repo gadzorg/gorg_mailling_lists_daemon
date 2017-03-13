@@ -8,64 +8,65 @@ class MaillingList
                     "type"=>"string",
                     "description"=>"Name of the mailling list"
                   },
-                "primary_email"=>{
-                  "type"=>"string",
-                  "description"=>"Primary email address used to create the mailling list"
-                },
-                "description"=>{
-                  "type"=>"string",
-                  "description"=>"Description of the mailling list"
-                },
-                "aliases"=>{
-                  "type"=>"array",
-                  "description"=>"Mailling list email aliases",
-                  "items"=>{
-                   "type"=>"string"
+                  "primary_email"=>{
+                    "type"=>"string",
+                    "description"=>"Primary email address used to create the mailling list"
+                  },
+                  "description"=>{
+                    "type"=>"string",
+                    "description"=>"Description of the mailling list"
+                  },
+                  "aliases"=>{
+                    "type"=>"array",
+                    "description"=>"Mailling list email aliases",
+                    "items"=>{
+                     "type"=>"string"
+                    }
+                  },
+                  "owners"=>{
+                    "type"=>"array",
+                    "description"=>"List of owners email address",
+                    "items"=>{
+                      "type"=>"string"
+                    }
+                  },
+                  "managers"=>{
+                    "type"=>"array",
+                    "description"=>"List of managers email address",
+                    "items"=>{
+                      "type"=>"string"
+                    }
+                  },
+                  "members"=>{
+                    "type"=>"array",
+                    "description"=>"List of members email address",
+                    "items"=>{
+                      "type"=>"string"
+                    }
+                  },
+                  "message_max_bytes_size"=>{
+                    "type"=>"integer",
+                    "description"=>"Message maximum size in bytes. Default to 3MB",
+                    "default"=>3145728
+                  },
+                  "object_tag"=>{
+                    "type"=>"string",
+                    "description"=>"Tag in front of object. ex: [me211]"
+                  },
+                  "message_footer"=>{
+                    "type"=>"string",
+                    "description"=>"Message appended to the bottom of each message"
+                  },
+                  "is_archived"=>{
+                    "type"=>"boolean",
+                    "description"=>"Defines if messages archive is activated for this mailling list",
+                    "default"=>false
+                  },
+                  "distribution_policy"=>{
+                    "enum"=>["open", "closed", "moderated"],
+                    "default"=>"closed",
+                    "description"=>"open: Anyone can post to the list;closed: Only members can post to the list; moderated: All message shave to be approved by a moderator"
                   }
-                },
-                "owners"=>{
-                  "type"=>"array",
-                  "description"=>"List of owners email address",
-                  "items"=>{
-                    "type"=>"string"
-                  }
-                },
-                "managers"=>{
-                  "type"=>"array",
-                  "description"=>"List of managers email address",
-                  "items"=>{
-                    "type"=>"string"
-                  }
-                },
-                "members"=>{
-                  "type"=>"array",
-                  "description"=>"List of members email address",
-                  "items"=>{
-                    "type"=>"string"
-                  }
-                },
-                "message_max_bytes_size"=>{
-                  "type"=>"integer",
-                  "description"=>"Message maximum size in bytes. Default to 3MB",
-                  "default"=>3145728
-                },
-                "object_tag"=>{
-                  "type"=>"string",
-                  "description"=>"Tag in front of object. ex: [me211]"
-                },
-                "message_footer"=>{
-                  "type"=>"string",
-                  "description"=>"Message appended to the bottom of each message"
-                },
-                "is_archived"=>{
-                  "type"=>"boolean",
-                  "description"=>"Defines if messages archive is activated for this mailling list",
-                  "default"=>false
-                },
-                "distribution_policy"=>{
-                  "enum"=>["open", "closed", "moderated"],
-                  "default"=>"closed",
-                  "description"=>"open: Anyone can post to the list;closed: Only members can post to the list; moderated: All message shave to be approved by a moderator"}
                 },
                 "additionalProperties"=>true,
                 "required"=>[
@@ -116,6 +117,12 @@ class MaillingList
     hsh=self.to_h
     JSON::Validator.fully_validate(JSON_SCHEMA, hsh, :insert_defaults => true)
     set_values_from_hash hsh
+  end
+
+  def validate!
+    unless valid?
+      raise DataValidationError.new(self.errors)
+    end
   end
 
   def valid?

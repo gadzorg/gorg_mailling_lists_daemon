@@ -7,8 +7,8 @@ class GroupsSettingsService < Google::Apis::GroupssettingsV1::GroupssettingsServ
 
   def initialize
     super
-    self.client_options.application_name = GorgMaillingListsDaemon.config["application_name"]
-    authorizer = DefaultAuthorizer
+    self.client_options.application_name = Application.config["application_name"]
+    authorizer = ServiceAccountAuthorizer
     self.authorization = authorizer.authorize
 
     self

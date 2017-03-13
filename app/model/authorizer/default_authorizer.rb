@@ -11,10 +11,10 @@ class DefaultAuthorizer
 
     OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
     CLIENT_SECRET_ENV_VAR="GMLD_GOOGLE_CLIENT_SECRET"
-    CLIENT_SECRET_FILE_PATH=File.expand_path("../secrets/client_secret.json",GorgMaillingListsDaemon.root)
+    CLIENT_SECRET_FILE_PATH=File.expand_path("../secrets/client_secret.json",Application.root)
 
     def authorize
-      user_id=GorgMaillingListsDaemon.config['admin_user_id']
+      user_id=Application.config['admin_user_id']
       scopes = ['https://www.googleapis.com/auth/admin.directory.group','https://www.googleapis.com/auth/apps.groups.settings']
 
       authorizer = Google::Auth::UserAuthorizer.new(client_id, scopes, token_store)
@@ -45,7 +45,7 @@ class DefaultAuthorizer
       begin
         Google::Auth::ClientId.from_hash(JSON.parse(ENV[CLIENT_SECRET_ENV_VAR]))
       rescue JSON::ParserError => e
-        GorgMaillingListsDaemon.logger.fatal "#{CLIENT_SECRET_ENV_VAR} env variable is not a parsable JSON. Ensure that this is a parsable JSON in a string"
+        Application.logger.fatal "#{CLIENT_SECRET_ENV_VAR} env variable is not a parsable JSON. Ensure that this is a parsable JSON in a string"
         raise e
       end
     end
@@ -59,10 +59,10 @@ class DefaultAuthorizer
     # Set token_store if not defined
     def token_store
       unless @token_store
-        if GorgMaillingListsDaemon.config['redis_url']
-          @token_store=Google::Auth::Stores::RedisTokenStore.new( redis: Redis.new(url:GorgMaillingListsDaemon.config['redis_url']))
+        if Application.config['redis_url']
+          @token_store=Google::Auth::Stores::RedisTokenStore.new( redis: Redis.new(url:Application.config['redis_url']))
         else
-          @token_store=Google::Auth::Stores::FileTokenStore.new( :file => File.expand_path("../secrets/tokens.yaml",GorgMaillingListsDaemon.root))
+          @token_store=Google::Auth::Stores::FileTokenStore.new( :file => File.expand_path("../secrets/tokens.yaml",Application.root))
         end
       end
       @token_store

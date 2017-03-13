@@ -40,9 +40,11 @@ class GUser
   # @return [Nil]
   def delete
     rate_limiter_service.incr
-    response=self.class.service.delete_user self.self.id
-    self.persisted=false
-    response
+    if self.id
+      response=self.class.service.delete_user(self.id)
+      self.persisted=false
+      response
+    end
   end
 
   # Test if user already exist in Google Apps Directory

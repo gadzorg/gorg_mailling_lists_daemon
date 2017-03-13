@@ -8,107 +8,24 @@
 #  - validate_payload() : method used to validate message's payload format
 #                         Returns a boolean (true = valid, false = invalid)
 #                         If not implemented, returns true
-class BaseMessageHandler < GorgService::MessageHandler
-  # Respond to routing key: request.gapps.create
 
-  def initialize incoming_msg
-    @msg=incoming_msg
+class GorgService::Consumer::MessageHandler::Base
 
-
-    begin
-
-
-      begin
-
-        # validate_payload method should be implemented by children classes
-        validate_payload
-
-        # process method must be implemented by children classes
-        process
-
-      rescue Google::Apis::ClientError =>e
-        if e.message.start_with? "dailyLimitExceeded"
-          GorgMaillingListsDaemon.logger.error e.message
-          raise_softfail("Google API daily Quota exceeded", error: e.message)
-        elsif e.message.start_with? "quotaExceeded"
-          GorgMaillingListsDaemon.logger.error e.message
-          raise_softfail("Google API 100 seconds Quota exceeded", error: e.message)
-        elsif e.message.start_with? "forbidden"
-          GorgMaillingListsDaemon.logger.error e.message
-          raise_softfail("Google forbidden this request but it's a strange bug", error: e.message)
-        end
-        raise
-      rescue Google::Apis::ServerError => e
-        if e.message.start_with? "Server error"
-          GorgMaillingListsDaemon.logger.error e.message
-          raise_softfail("Google server error, retrying later", error: e.message)
-        end
-        raise
-      rescue Faraday::ConnectionFailed => e
-        raise_google_connection_error
-      end
-
-
-
-
-    rescue GorgService::HardfailError, GorgService::SoftfailError
-      raise
-    
-    rescue StandardError => e
-      GorgMaillingListsDaemon.logger.error "Uncatched exception : #{e.inspect}"
-      raise_hardfail("Uncatched exception", error: e)
+    handle_error Faraday::ConnectionFailed do |error,message|
+        Application.logger.error("Unable to connect to Google API")
+        raise_softfail("GoogleAPIConnectionError", error: error, message: message)
     end
-  end
 
-  #convenience method
-  def msg
-    @msg
-  end
-
-  ## Children implemented methods
-
-  # process MUST be implemented
-  # If not, raise hardfail
-  def process
-    GorgMaillingListsDaemon.logger.error("#{self.class} doesn't implement process()")
-    raise_hardfail("#{self.class} doesn't implement process()", error: UnimplementedMessageHandlerError)
-  end
-
-  # validate_payload MAY be implemented
-  # If not, assumes messages is valid, log a warning and returns true
-  def validate_payload
-    GorgMaillingListsDaemon.logger.warn("#{self.class} doesn't validate_payload(), assume payload is valid")
-    true
-  end
-
-
-  ## Errors management
-
-
-  # To be raised in case of connection errors with Gram API server
-  def raise_gram_connection_error
-    GorgMaillingListsDaemon.logger.error("Unable to connect to GrAM API server")
-    raise_softfail("Unable to connect to GrAM API server")
-  end
-
-  def raise_google_connection_error
-    GorgMaillingListsDaemon.logger.error("Unable to connect to Google API")
-    raise_softfail("Unable to connect  to Google API")
-  end
-
-  def raise_gram_account_not_found(value)
-    GorgMaillingListsDaemon.logger.error("Account not found in Gram - UUID= #{value}")
-    raise_hardfail("Account not found in Gram - UUID= #{value}",error: GramAccountNotFoundError)
-  end
-
-  def raise_not_updated_group(ldap_group)
-    GorgMaillingListsDaemon.logger.error("Unable to save group #{ldap_group.cn} : #{ldap_group.errors.messages.inspect}")
-    raise_hardfail("Unable to save group #{ldap_group.cn} : #{ldap_group.errors.messages.inspect}")
-  end
+    handle_error Google::Apis::ClientError do |error, message|
+      if error.message.start_with? "dailyLimitExceeded"
+        GoogleDirectoryDaemon.logger.error e.message
+        raise_softfail("Google API Quota exceeded", error: e.message, message: message)
+      elsif error.message.start_with? "quotaExceeded"
+        Application.logger.error e.message
+        raise_softfail("Google API 100 seconds Quota exceeded", error: error.message, message: message)
+      else
+        Application.logger.error("Unknown Google API Client Error")
+        raise_hardfail("UnknownGoogleAPIClientError", error: error, message: message)
+      end
+    end
 end
-
-## Error classes
-
-class InvalidPayloadError < StandardError; end
-class UnimplementedMessageHandlerError < StandardError; end
-class GramAccountNotFoundError < StandardError; end

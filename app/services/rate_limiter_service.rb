@@ -1,6 +1,6 @@
 class RateLimiterService
 
-  def initialize(key=GorgMaillingListsDaemon.config['admin_user_id'],time_window=GorgMaillingListsDaemon.config['google_api_rate_time_window'].to_i,max=GorgMaillingListsDaemon.config['google_api_rate_limit'].to_i)
+  def initialize(key=Application.config['admin_user_id'],time_window=Application.config['google_api_rate_time_window'].to_i,max=Application.config['google_api_rate_limit'].to_i)
     @time_window=time_window.to_i
     @max=max.to_i
     @key="#{key}_#{@time_window}"
@@ -10,7 +10,7 @@ class RateLimiterService
   def wait
     unless allowed_count
       time=time_to_wait+10
-      GorgMaillingListsDaemon.logger.debug "Quota exceeded, waiting for #{time} seconds..."
+      Application.logger.debug "Quota exceeded, waiting for #{time} seconds..."
       sleep(time) 
     end
   end
@@ -35,7 +35,7 @@ class RateLimiterService
   end
 
   def self.redis
-    @redis||=Redis.new(url:GorgMaillingListsDaemon.config['redis_url'])
+    @redis||=Redis.new(url:Application.config['redis_url'])
   end
 
 end

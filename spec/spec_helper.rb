@@ -1,16 +1,17 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
+require "bundler/setup"
+require "simplecov"
+SimpleCov.start
 
 require 'rspec/collection_matchers'
 require 'factory_girl'
 
-$LOAD_PATH.unshift File.expand_path('../../app', __FILE__)
-require 'gorg_mailling_lists_daemon'
+APP_PATH = File.expand_path('../../config/boot', __FILE__)
+ENV["RAKE_ENV"]="test"
 
- ENV['GOOGLE_DIRECTORY_DAEMON_ENV']="test"
+require APP_PATH
+
 
 RSpec.configure do |config|
-
   config.default_formatter = 'doc'
   config.color = true
   config.include FactoryGirl::Syntax::Methods
@@ -30,4 +31,4 @@ RSpec.configure do |config|
   end
 end
 
-require 'support/factories'
+require 'faker'

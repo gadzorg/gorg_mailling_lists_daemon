@@ -30,6 +30,11 @@ class GGroup
     self
   end
 
+  def save!
+    raise unless save
+  end
+
+
 
   # Delete User from Google Apps Directory
   #
