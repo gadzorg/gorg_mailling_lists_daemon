@@ -19,6 +19,11 @@ default: &default
 
   admin_user_id: alexandre.narbonne@poubs.org
 
+  google_api_rate_time_window: 100
+  google_api_rate_limit: 1000
+  batch_size: 20
+
+
 
 development:
   <<: *default
