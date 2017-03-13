@@ -84,7 +84,7 @@ end
 
 class Application
 
-  env_prefix 'NLD'
+  env_prefix 'GMLD'
 
 end
 
