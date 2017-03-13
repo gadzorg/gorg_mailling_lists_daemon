@@ -20,30 +20,34 @@ RSpec.configure do |c|
           @app.stop
         end
       ensure
-        Application.logger.info "#### CLEANING UP GSuite Users"
+        Application.logger.info "#### CLEANING UP GSuite"
 
-        if ggroup_email
-          Application.logger
+        if defined?(ggroup_email)&&ggroup_email
+          Application.logger.info "## Delete Group #{ggroup_email}"
           temp=GGroup.find(ggroup_email)
           temp&&temp.delete
         end
 
-        if guser_1_attributes
+        if defined?(guser_1_attributes)&&guser_1_attributes
+          Application.logger.info "## Delete User #{guser_1_attributes[:primary_email]}"
           temp=GUser.find(guser_1_attributes[:primary_email])
           temp&&temp.delete
         end
 
-        if guser_2_attributes
+        if defined?(guser_2_attributes)&&guser_2_attributes
+          Application.logger.info "## Delete User #{guser_2_attributes[:primary_email]}"
           temp=GUser.find(guser_2_attributes[:primary_email])
           temp&&temp.delete
         end
 
-        if guser_3_attributes
+        if defined?(guser_3_attributes)&&guser_3_attributes
+          Application.logger.info "## Delete User #{guser_3_attributes[:primary_email]}"
           temp=GUser.find(guser_3_attributes[:primary_email])
           temp&&temp.delete
         end
 
-        if guser_4_attributes
+        if defined?(guser_4_attributes)&&guser_4_attributes
+          Application.logger.info "## Delete User #{guser_4_attributes[:primary_email]}"
           temp=GUser.find(guser_4_attributes[:primary_email])
           temp&&temp.delete
         end
