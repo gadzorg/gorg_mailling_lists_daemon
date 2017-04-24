@@ -8,7 +8,9 @@ RSpec.describe "Request an ggroup update", type: :integration do
 
   let(:message) {GorgService::Message.new(event:'request.mailinglist.update',
                                           data: payload,
-                                          reply_to: Application.config['rabbitmq_event_exchange_name'])}
+                                          reply_to: Application.config['rabbitmq_event_exchange_name'],
+                                          soa_version: "2.0"
+  )}
 
   let(:ggroup_name) {Faker::Company.name}
   let(:ggroup_email) {"#{Faker::Internet.user_name(ggroup_name)}@poubs.org"}

@@ -8,7 +8,9 @@ RSpec.describe "Request a ggroup delete", type: :integration do
 
   let(:message) {GorgService::Message.new(event:'request.mailinglist.delete',
                                           data: payload,
-                                          reply_to: Application.config['rabbitmq_event_exchange_name'])}
+                                          reply_to: Application.config['rabbitmq_event_exchange_name'],
+                                          soa_version: "2.0"
+  )}
 
   let(:ggroup_name) {Faker::Company.name}
   let(:ggroup_email) {"#{Faker::Internet.user_name(ggroup_name)}@poubs.org"}
@@ -32,7 +34,7 @@ RSpec.describe "Request a ggroup delete", type: :integration do
 
     it "delete group" do
       GorgService::Producer.new.publish_message(message)
-      sleep(10)
+      sleep(15)
       expect(GGroup.find(@gg.email)).to be_nil
     end
 
