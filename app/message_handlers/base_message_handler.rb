@@ -18,10 +18,10 @@ class GorgService::Consumer::MessageHandler::Base
 
     handle_error Google::Apis::ClientError do |error, message|
       if error.message.start_with? "dailyLimitExceeded"
-        GoogleDirectoryDaemon.logger.error e.message
-        raise_softfail("Google API Quota exceeded", error: e.message, message: message)
+        GoogleDirectoryDaemon.logger.error error.message
+        raise_softfail("Google API Quota exceeded", error: error.message, message: message)
       elsif error.message.start_with? "quotaExceeded"
-        Application.logger.error e.message
+        Application.logger.error error.message
         raise_softfail("Google API 100 seconds Quota exceeded", error: error.message, message: message)
       else
         Application.logger.error("Unknown Google API Client Error")
