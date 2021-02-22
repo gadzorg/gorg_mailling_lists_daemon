@@ -11,5 +11,8 @@ services:
   - redis
 
 addons:
+  apt:
+    packages:
+      - rabbitmq-server
   code_climate:
       repo_token: 64e1043b9bd0f931bbe0a333411d1aeb92f91748e3a21397a0d169f13ae0c970
