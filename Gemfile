@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
-gem 'gorg_service', '~>6.0'
+gem 'gorg_service', '~> 6.0'
 
-gem 'gram_v2_client', '~> 3.0'
+gem 'gram_v2_client'
 
 gem 'google-api-client'
 gem 'googleauth'
 
-gem 'redis', '~>3.2'
+gem 'redis'
 
 group :test do
   gem "simplecov"

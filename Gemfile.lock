@@ -80,7 +80,7 @@ GEM
     public_suffix (4.0.6)
     rails-observers (0.1.2)
       activemodel (~> 4.0)
-    redis (3.3.5)
+    redis (4.2.5)
     representable (3.0.4)
       declarative (< 0.1.0)
       declarative-option (< 0.2.0)
@@ -132,7 +132,7 @@ DEPENDENCIES
   google-api-client
   googleauth
   gorg_service (~> 6.0)
-  gram_v2_client (~> 3.0)
+  gram_v2_client
   redis
   rspec
   rspec-collection_matchers
