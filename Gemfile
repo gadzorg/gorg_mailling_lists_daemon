@@ -4,7 +4,7 @@ ruby File.read(".ruby-version").strip
 
 gem 'gorg_service', '~> 6.0'
 
-gem 'gram_v2_client'
+gem 'gram_v2_client', git: "https://github.com/gadzorg/gram2_api_client_ruby"
 
 gem 'google-api-client'
 gem 'googleauth'
