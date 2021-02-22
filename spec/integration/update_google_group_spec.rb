@@ -13,44 +13,44 @@ RSpec.describe "Request an ggroup update", type: :integration do
   )}
 
   let(:ggroup_name) {Faker::Company.name}
-  let(:ggroup_email) {"#{Faker::Internet.user_name(ggroup_name)}@poubs.org"}
+  let(:ggroup_email) {"#{Faker::Internet.username(specifier: ggroup_name)}@poubs.org"}
   let(:ggroup_description) {Faker::Company.bs}
 
   let(:guser_1_attributes) {{
-        name: {
-            given_name: "User 1",
-            family_name: Faker::Company.name,
+        specifier: {
+            given_specifier: "User 1",
+            family_specifier: Faker::Company.name,
         },
         password: '96dcd4c1f74f7a2eed974365c0bf9ec434ff31f6',
         hash_function: "SHA-1",
-        primary_email: "#{Faker::Internet.user_name(Faker::Name.name)}_#{Faker::Internet.user_name(ggroup_name)}@poubs.org"
+        primary_email: "#{Faker::Internet.username(specifier: Faker::Name.name)}_#{Faker::Internet.username(specifier: ggroup_name)}@poubs.org"
     }}
   let(:guser_2_attributes) {{
-      name: {
-          given_name: "User 2",
-          family_name: Faker::Company.name,
+      specifier: {
+          given_specifier: "User 2",
+          family_specifier: Faker::Company.name,
       },
       password: '96dcd4c1f74f7a2eed974365c0bf9ec434ff31f6',
       hash_function: "SHA-1",
-      primary_email: "#{Faker::Internet.user_name(Faker::Name.name)}_#{Faker::Internet.user_name(ggroup_name)}@poubs.org"
+      primary_email: "#{Faker::Internet.username(specifier: Faker::Name.name)}_#{Faker::Internet.username(specifier: ggroup_name)}@poubs.org"
   }}
   let(:guser_3_attributes) {{
-      name: {
-          given_name: "User 3",
-          family_name: Faker::Company.name,
+      specifier: {
+          given_specifier: "User 3",
+          family_specifier: Faker::Company.name,
       },
       password: '96dcd4c1f74f7a2eed974365c0bf9ec434ff31f6',
       hash_function: "SHA-1",
-      primary_email: "#{Faker::Internet.user_name(Faker::Name.name)}_#{Faker::Internet.user_name(ggroup_name)}@poubs.org"
+      primary_email: "#{Faker::Internet.username(specifier: Faker::Name.name)}_#{Faker::Internet.username(specifier: ggroup_name)}@poubs.org"
   }}
   let(:guser_4_attributes) {{
-      name: {
-          given_name: "User 4",
-          family_name: Faker::Company.name,
+      specifier: {
+          given_specifier: "User 4",
+          family_specifier: Faker::Company.name,
       },
       password: '96dcd4c1f74f7a2eed974365c0bf9ec434ff31f6',
       hash_function: "SHA-1",
-      primary_email: "#{Faker::Internet.user_name(Faker::Name.name)}_#{Faker::Internet.user_name(ggroup_name)}@poubs.org"
+      primary_email: "#{Faker::Internet.username(specifier: Faker::Name.name)}_#{Faker::Internet.username(specifier: ggroup_name)}@poubs.org"
   }}
   let(:guser_1){GUser.new(guser_1_attributes).save}
   let(:guser_2){GUser.new(guser_2_attributes).save}
@@ -62,7 +62,7 @@ RSpec.describe "Request an ggroup update", type: :integration do
         "name"=>ggroup_name,
         "primary_email"=>ggroup_email,
         "description"=>ggroup_description,
-        "aliases"=>["#{Faker::Internet.user_name(ggroup_name)}_2@poubs.org","#{Faker::Internet.user_name(ggroup_name)}_3@poubs.org"],
+        "aliases"=>["#{Faker::Internet.username(specifier: ggroup_name)}_2@poubs.org","#{Faker::Internet.username(specifier: ggroup_name)}_3@poubs.org"],
         "owners"=>[guser_1.primary_email],
         "managers"=> [guser_2.primary_email],
         "members"=> [guser_3.primary_email],
@@ -90,7 +90,7 @@ RSpec.describe "Request an ggroup update", type: :integration do
     before(:each) do
       @gg=GGroup.new({
                          email: ggroup_email,
-                         name:  ggroup_name,
+                         specifier:  ggroup_name,
                          description: ggroup_description
                      }).save
     end

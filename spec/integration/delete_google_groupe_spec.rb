@@ -13,7 +13,7 @@ RSpec.describe "Request a ggroup delete", type: :integration do
   )}
 
   let(:ggroup_name) {Faker::Company.name}
-  let(:ggroup_email) {"#{Faker::Internet.user_name(ggroup_name)}@poubs.org"}
+  let(:ggroup_email) {"#{Faker::Internet.username(specifier: ggroup_name)}@poubs.org"}
   let(:ggroup_description) {Faker::Company.bs}
 
   context "Existing google Group" do
