@@ -21,8 +21,8 @@ GEM
     builder (3.2.3)
     bunny (2.6.5)
       amq-protocol (>= 2.1.0)
-    codeclimate-test-reporter (1.0.7)
-      simplecov
+    codeclimate-test-reporter (1.0.9)
+      simplecov (<= 0.13)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     declarative (0.0.9)
@@ -66,7 +66,7 @@ GEM
     httpclient (2.8.3)
     hurley (0.2)
     i18n (0.8.1)
-    json (2.0.3)
+    json (2.5.1)
     json-schema (2.8.0)
       addressable (>= 2.4)
     jwt (1.5.6)
@@ -116,7 +116,7 @@ GEM
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
-    simplecov-html (0.10.0)
+    simplecov-html (0.10.2)
     thread_safe (0.3.6)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
@@ -145,4 +145,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.14.6
+   1.17.3
