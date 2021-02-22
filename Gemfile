@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby File.read(".ruby-version").strip
+
 gem 'gorg_service', '~> 6.0'
 
 gem 'gram_v2_client'
