@@ -14,11 +14,11 @@ default: &default
   rabbitmq_queue_name: gdirdaemon
   rabbitmq_deferred_time: 1800000
   rabbitmq_max_attempts: 48
-  exchange_name: exchange
+  rabbitmq_event_exchange_name: agoram_event_exchange
   rabbitmq_user: my_user
   rabbitmq_password: P4ssWord
 
-  log_routing_key:"logging.key"
+  log_routing_key: "logging.key"
   gram_api_host: myHost.com
   gram_api_user: myUser
   gram_api_password: PasswRD
