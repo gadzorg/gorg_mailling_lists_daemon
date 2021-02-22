@@ -20,6 +20,5 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec-collection_matchers'
   gem 'bogus'
-  gem "factory_girl", "~> 4.0"
   gem 'faker'
 end
