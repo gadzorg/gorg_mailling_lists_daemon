@@ -17,6 +17,10 @@ RSpec.describe "Request an ggroup update", type: :integration do
   let(:ggroup_description) {Faker::Company.bs}
 
   let(:guser_1_attributes) {{
+        name: {
+          family_name: Faker::Name.name,
+          given_name: Faker::Name.first_name,
+        },
         specifier: {
             given_specifier: "User 1",
             family_specifier: Faker::Company.name,
@@ -26,6 +30,10 @@ RSpec.describe "Request an ggroup update", type: :integration do
         primary_email: "#{Faker::Internet.username(specifier: Faker::Name.name)}_#{Faker::Internet.username(specifier: ggroup_name)}@poubs.org"
     }}
   let(:guser_2_attributes) {{
+      name: {
+        family_name: Faker::Name.name,
+        given_name: Faker::Name.first_name,
+      },
       specifier: {
           given_specifier: "User 2",
           family_specifier: Faker::Company.name,
@@ -35,6 +43,10 @@ RSpec.describe "Request an ggroup update", type: :integration do
       primary_email: "#{Faker::Internet.username(specifier: Faker::Name.name)}_#{Faker::Internet.username(specifier: ggroup_name)}@poubs.org"
   }}
   let(:guser_3_attributes) {{
+      name: {
+        family_name: Faker::Name.name,
+        given_name: Faker::Name.first_name,
+      },
       specifier: {
           given_specifier: "User 3",
           family_specifier: Faker::Company.name,
@@ -44,6 +56,10 @@ RSpec.describe "Request an ggroup update", type: :integration do
       primary_email: "#{Faker::Internet.username(specifier: Faker::Name.name)}_#{Faker::Internet.username(specifier: ggroup_name)}@poubs.org"
   }}
   let(:guser_4_attributes) {{
+      name: {
+        family_name: Faker::Name.name,
+        given_name: Faker::Name.first_name,
+      },
       specifier: {
           given_specifier: "User 4",
           family_specifier: Faker::Company.name,
