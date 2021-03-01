@@ -1,13 +1,15 @@
 source 'https://rubygems.org'
 
-gem 'gorg_service', '~>6.0'
+ruby File.read(".ruby-version").strip
 
-gem 'gram_v2_client', '~> 3.0'
+gem 'gorg_service', '~> 6.0'
+
+gem 'gram_v2_client', git: "https://github.com/gadzorg/gram2_api_client_ruby"
 
 gem 'google-api-client'
 gem 'googleauth'
 
-gem 'redis', '~>3.2'
+gem 'redis'
 
 group :test do
   gem "simplecov"
@@ -20,6 +22,5 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec-collection_matchers'
   gem 'bogus'
-  gem "factory_girl", "~> 4.0"
   gem 'faker'
 end

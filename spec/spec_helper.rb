@@ -3,7 +3,6 @@ require "simplecov"
 SimpleCov.start
 
 require 'rspec/collection_matchers'
-require 'factory_girl'
 
 APP_PATH = File.expand_path('../../config/boot', __FILE__)
 ENV["RAKE_ENV"]="test"
@@ -14,11 +13,6 @@ require APP_PATH
 RSpec.configure do |config|
   config.default_formatter = 'doc'
   config.color = true
-  config.include FactoryGirl::Syntax::Methods
-
-  config.before(:suite) do
-    FactoryGirl.find_definitions
-  end
 
 
   config.mock_with :rspec do |mocks|
